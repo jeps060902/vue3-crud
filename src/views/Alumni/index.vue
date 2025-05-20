@@ -6,16 +6,21 @@ import ModalAlumni from "../Komponen/ModalAlumni.vue";
 import "simple-datatables/dist/style.css";
 
 const Alumni = ref([]);
+const currentAlumni = ref({});  
 const successMessage = ref("");
 const fetchDataAlumni = async () => {
   const response = await api.get("/api/Alumni");
   Alumni.value = response.data.data;
 };
-const fetchDataAlumniEdit = async () => {
-  const response = await api.get("/api/Alumni/id");
-  Alumni.value = response.data.data;
+const handleEdit = async (id) => {
+  try {
+    const response = await api.get(`/api/Alumni/${id}`);
+    currentAlumni.value = response.data.data;
+    console.log(currentAlumni.value);
+  } catch (error) {
+    console.error("Gagal fetch data:", error);
+  }
 };
-
 onMounted(async () => {
   await fetchDataAlumni();
   // Delay agar DOM selesai render
@@ -37,7 +42,7 @@ onMounted(async () => {
 <template>
   <div>
     <h3 class="mb-3">Data Alumni</h3>
-    <ModalAlumni />
+    <ModalAlumni :alumni="currentAlumni"/>
     <button
       type="button"
       class="mb-3 btn-grad"
@@ -69,15 +74,13 @@ onMounted(async () => {
           <td>
             <button
               type="button"
+              
               class="badgeEdit-grad"
               data-bs-toggle="modal"
-              data-bs-target="#modalTambahPrestasi"
-              data-id="{{ item.id }}"
-              data-nama="{{ item.nama }}"
-              data-jurusan="{{ item.angkatan }}"
-              data-angkatan="{{ item.jurusan }}"
+              data-bs-target="#modalEditAlumni"
+              @click="handleEdit(item.id)"
             >
-              tambah
+              Edit
             </button>
           </td>
         </tr>

@@ -1,17 +1,17 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import api from "../../api";
 
-const nama = ref("");
+const nama_input = ref("");
 const jurusan = ref("");
 const angkatan = ref("");
 const errors = ref({});
 
 const tambah = async () => {
-  console.log("submit jalan");
+  console.log("submit jalan");  
   let formData = new FormData();
 
-  formData.append("nama", nama.value);
+  formData.append("nama", nama_input.value);
   formData.append("jurusan", jurusan.value);
   formData.append("angkatan", angkatan.value);
 
@@ -24,6 +24,44 @@ const tambah = async () => {
     if (err.response && err.response.status === 422) {
       errors.value = err.response.data.errors;
     }
+  }
+};
+
+const props = defineProps({
+  alumni: Object
+});
+const id_edit = ref(null);
+const nama_edit = ref("");
+const jurusan_edit = ref("");
+const angkatan_edit = ref("");
+import { toRaw } from "vue";
+
+watch(
+  () => props.alumni,
+  (newVal) => {
+    const raw = toRaw(newVal);
+    if (raw && Object.keys(raw).length > 0) {
+      id_edit.value = raw.id ?? null;
+      nama_edit.value = raw.nama ?? "";
+      jurusan_edit.value = raw.jurusan ?? "";
+      angkatan_edit.value = raw.angkatan ?? "";
+    }
+  },
+  { immediate: true }
+);
+
+
+const edit = async () => {
+  try {
+    const res = await api.post(`/api/Alumni/${id_edit.value}`, {
+      nama: nama_edit.value,
+      jurusan: jurusan_edit.value,
+      angkatan: Number(angkatan_edit.value)
+    });
+    localStorage.setItem("successMessage", res.data.message || "Data berhasil diupdate");
+    window.location.reload();
+  } catch (error) {
+    errors.value = error.response?.data || { message: "Terjadi kesalahan" };
   }
 };
 </script>
@@ -50,7 +88,7 @@ const tambah = async () => {
           <div class="modal-body">
             Nama
             <input
-              v-model="nama"
+              v-model="nama_input"
               class="form-control mb-1"
               type="text"
               placeholder="Tambahkan Nama"
@@ -131,104 +169,53 @@ const tambah = async () => {
       </form>
     </div>
   </div>
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg">
-      <form @submit.prevent="tambah()">
+  <div class="modal fade" id="modalEditAlumni" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form @submit.prevent="edit()">
+        <input type="hidden" v-model="id_edit"/>
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <h5 class="modal-title">Edit Alumni</h5>
             <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
-              aria-label="Close"
             ></button>
           </div>
           <div class="modal-body">
-            Nama
+            <label>Nama</label>
             <input
-              v-model="nama"
-              class="form-control mb-1"
               type="text"
-              placeholder="Tambahkan Nama"
-              name="nama"
+               v-model="nama_edit"
+              class="form-control mb-2"
             />
-            <div v-if="errors.nama" class="text-danger mb-2">
-              {{ errors.nama[0] }}
-            </div>
-            Jurusan
-            <div class="input-group mb-3">
-              <label class="input-group-text" for="inputGroupSelect01"
-                >Options</label
-              >
-              <select
-                v-model="jurusan"
-                class="form-select"
-                id="inputGroupSelect01"
-                name="jurusan"
-                required
-              >
-                <option value="" selected disabled>--Pilih Jurusan--</option>
-                <option value="PPLG">PPLG</option>
-                <option value="Akuntansi">Akuntansi</option>
-                <option value="Perhotelan">Perhotelan</option>
-              </select>
-              <div v-if="errors.jurusan" class="text-danger mb-2">
-                {{ errors.jurusan[0] }}
-              </div>
-            </div>
-            Tahun Angkatan
-            <div class="input-group mb-3">
-              <label class="input-group-text" for="inputGroupSelect01"
-                >Options</label
-              >
-              <select
-                v-model="angkatan"
-                class="form-select"
-                id="inputGroupSelect01"
-                name="angkatan"
-              >
-                <option selected>--Pilih Tahun--</option>
-                <option value="2013">2013</option>
-                <option value="2014">2014</option>
-                <option value="2015">2015</option>
-                <option value="2016">2016</option>
-                <option value="2017">2017</option>
-                <option value="2018">2018</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-                <option value="2027">2027</option>
-                <option value="2028">2028</option>
-                <option value="2029">2029</option>
-                <option value="2030">2030</option>
-              </select>
-              <div v-if="errors.angkatan" class="text-danger mb-2">
-                {{ errors.angkatan[0] }}
-              </div>
-            </div>
+            <label>Jurusan</label>
+            <select  v-model="jurusan_edit" class="form-select mb-2">
+              <option value="" selected disabled>--Pilih Jurusan--</option>
+              <option value="PPLG">PPLG</option>
+              <option value="Akuntansi">Akuntansi</option>
+              <option value="Perhotelan">Perhotelan</option>
+            </select>
+            <label>Angkatan</label>
+            <select v-model="angkatan_edit" class="form-select">
+              <option selected>--Pilih Tahun--</option>
+              <option value="2013">2013</option>
+              <option value="2014">2014</option>
+              <option value="2015">2015</option>
+              <option value="2016">2016</option>
+              <option value="2017">2017</option>
+              <option value="2018">2018</option>
+              <option value="2019">2019</option>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+            </select>
           </div>
-
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
           </div>
         </div>
       </form>
