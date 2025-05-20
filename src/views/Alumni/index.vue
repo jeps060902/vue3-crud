@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 import api from "../../api";
 import { DataTable } from "simple-datatables";
 import ModalAlumni from "../Komponen/ModalAlumni.vue";
@@ -33,9 +33,9 @@ onMounted(async () => {
       successMessage.value = "";
     }, 3000);
   }
-  setTimeout(() => {
+  nextTick(() => {
     new DataTable("#alumniTable");
-  }, 0);
+  });
 });
 </script>
 
@@ -67,8 +67,8 @@ onMounted(async () => {
       </thead>
       <tbody>
         <tr v-for="(item, index) in Alumni" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ item.Nama }}</td>
+          <td>{{ item.id }}</td>
+          <td>{{ item.nama }}</td>
           <td>{{ item.angkatan }}</td>
           <td>{{ item.jurusan }}</td>
           <td>

@@ -27,7 +27,6 @@ const tambah = async () => {
   }
 };
 
-<<<<<<< HEAD
 const props = defineProps({
   alumni: Object
 });
@@ -64,49 +63,6 @@ const edit = async () => {
   } catch (error) {
     errors.value = error.response?.data || { message: "Terjadi kesalahan" };
   }
-=======
-const edit_id = ref(null);
-const edit_nama = ref("");
-const edit_jurusan = ref("");
-const edit_angkatan = ref("");
-const props = defineProps({
-  alumni: {
-    type: Object,
-    default: () => ({}),
-  },
-});
-watch(
-  () => props.alumni,
-
-  (newVal) => {
-    if (newVal && Object.keys(newVal).length > 0) {
-      edit_id.value = newVal.id;
-      edit_nama.value = newVal.nama;
-      edit_jurusan.value = newVal.jurusan;
-      edit_angkatan.value = newVal.angkatan;
-    }
-  }
-);
-
-const updatePost = async () => {
-  let f = new FormData();
-  // f.append("id", edit_id.value);
-  f.append("nama", edit_nama.value);
-  f.append("jurusan", edit_jurusan.value);
-  f.append("angkatan", edit_angkatan.value);
-  f.append("_method", "PUT");
-
-  await api
-    .post(`/api/Alumni/${edit_id.value}`, f)
-    .then((res) => {
-      alert("Berhasil mengupdate data");
-      window.location.reload();
-    })
-    .catch((err) => {
-      console.error("Error update:", err);
-      alert("Gagal mengupdate data. Cek console.");
-    });
->>>>>>> 7b46051863d1b9a576b1d78de0af4d4e85a7a0e3
 };
 </script>
 <template>
@@ -126,16 +82,11 @@ const updatePost = async () => {
             <input type="text" name="id" v-model="edit_id" id="edit-id" />
             <label>Nama</label>
             <input
-<<<<<<< HEAD
-              v-model="nama_input"
               class="form-control mb-1"
-=======
->>>>>>> 7b46051863d1b9a576b1d78de0af4d4e85a7a0e3
               type="text"
               name="nama"
               v-model="edit_nama"
               id="edit-nama"
-              class="form-control mb-2"
             />
             <label>Jurusan</label>
             <select
@@ -178,23 +129,10 @@ const updatePost = async () => {
       </form>
     </div>
   </div>
-<<<<<<< HEAD
   <div class="modal fade" id="modalEditAlumni" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <form @submit.prevent="edit()">
         <input type="hidden" v-model="id_edit"/>
-=======
-
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg">
-      <form @submit.prevent="tambah()">
->>>>>>> 7b46051863d1b9a576b1d78de0af4d4e85a7a0e3
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Edit Alumni</h5>
