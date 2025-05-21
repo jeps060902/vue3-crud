@@ -11,15 +11,20 @@ const routes=[
         component : () => import('../views/Alumni/index.vue')
     },
     {
-        path:'/Create',
-        name:'Alumni.create',
-        component : () => import('../views/Alumni/create.vue')
+        path:'/Prestasi',
+        name:'Alumni.prestasi',
+        component : () => import('../views/Prestasi/index.vue')
     },
     {
-        path:'/edit/:id',
-        name:'Alumni.edit',
-        component : () => import('../views/Alumni/edit.vue')
-    }
+        path:'/Prestasi/:id',
+        name:'Alumni.prestasiDetail',
+        component : () => import('../views/Prestasi/index.vue')
+    },
+    // {
+    //     path:'/edit/:id',
+    //     name:'Alumni.edit',
+    //     component : () => import('../views/Alumni/edit.vue')
+    // }
 ]
 const router = createRouter({
   history: createWebHistory(),

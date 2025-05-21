@@ -6,13 +6,13 @@ import ModalAlumni from "../Komponen/ModalAlumni.vue";
 import "simple-datatables/dist/style.css";
 
 const Alumni = ref([]);
-const currentAlumni = ref({});  
+const currentAlumni = ref({});
 const successMessage = ref("");
 const fetchDataAlumni = async () => {
   const response = await api.get("/api/Alumni");
   Alumni.value = response.data.data;
 };
-const handleEdit = async (id) => {
+const handleAlumni = async (id) => {
   try {
     const response = await api.get(`/api/Alumni/${id}`);
     currentAlumni.value = response.data.data;
@@ -42,7 +42,7 @@ onMounted(async () => {
 <template>
   <div>
     <h3 class="mb-3">Data Alumni</h3>
-    <ModalAlumni :alumni="currentAlumni"/>
+    <ModalAlumni :alumni="currentAlumni" />
     <button
       type="button"
       class="mb-3 btn-grad"
@@ -55,36 +55,65 @@ onMounted(async () => {
     <div v-if="successMessage" class="alert alert-success mt-3">
       {{ successMessage }}
     </div>
-    <table id="alumniTable" class="table table-striped table-dark">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Nama</th>
-          <th>Tahun</th>
-          <th>Jurusan</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in Alumni" :key="index">
-          <td>{{ item.id }}</td>
-          <td>{{ item.nama }}</td>
-          <td>{{ item.angkatan }}</td>
-          <td>{{ item.jurusan }}</td>
-          <td>
-            <button
-              type="button"
-              
-              class="badgeEdit-grad"
-              data-bs-toggle="modal"
-              data-bs-target="#modalEditAlumni"
-              @click="handleEdit(item.id)"
-            >
-              Edit
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table id="alumniTable" class="table table-striped table-dark">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Tahun</th>
+            <th>Jurusan</th>
+            <th>Prestasi</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in Alumni" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ item.nama }}</td>
+            <td>{{ item.angkatan }}</td>
+            <td>{{ item.jurusan }}</td>
+            <td>
+              <a
+                v-if="item.prestasi && item.prestasi.length >= 1"
+                :href="`/prestasi/${item.id}`"
+              >
+                lihat prestasi
+              </a>
+              <button
+                v-else
+                type="button"
+                class="badgeTambah-grad"
+                data-bs-toggle="modal"
+                data-bs-target="#modalTambahAlumni"
+                @click="handleAlumni(item.id)"
+              >
+                tambah
+              </button>
+            </td>
+            <td>
+              <button
+                type="button"
+                class="badgeEdit-grad"
+                data-bs-toggle="modal"
+                data-bs-target="#modalEditAlumni"
+                @click="handleAlumni(item.id)"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                class="badgeHapus-grad"
+                data-bs-toggle="modal"
+                data-bs-target="#modalHapusAlumni"
+                @click="handleAlumni(item.id)"
+              >
+                Hapus
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
