@@ -336,4 +336,100 @@ const tambahPrestasi = async () => {
       </form>
     </div>
   </div>
+  <!-- Tambah Karir -->
+  <div
+    class="modal fade"
+    id="modalTambahKarir"
+    tabindex="-1"
+    aria-labelledby="modalTambahKarirLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <form @submit.prevent="tambahPrestasi" method="POST">
+        <input
+          type="hidden"
+          name="alumni_id"
+          v-model="id_edit"
+          id="inputAlumniId"
+        />
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTambahPrestasiLabel">
+              Tambah Prestasi
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Tutup"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-2">
+              <label>Nama</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="nama_edit"
+                disabled
+              />
+            </div>
+            <div class="mb-2">
+              <label>Jurusan</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="jurusan_edit"
+                id="inputJurusan"
+                disabled
+              />
+            </div>
+            <div class="mb-2">
+              <label>Angkatan</label>
+              <input
+                type="text"
+                v-model="angkatan_edit"
+                class="form-control"
+                id="inputAngkatan"
+                disabled
+              />
+            </div>
+            <div class="mb-2">
+              <label>Nama Prestasi</label>
+              <input
+                type="text"
+                v-model="nama_prestasi"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-2">
+              <label>Tingkatan</label>
+              <select v-model="grade" class="form-select">
+                <option value="" selected disabled>--Pilih Tingkatan--</option>
+                <option value="1">Desa</option>
+                <option value="2">Kecataman</option>
+                <option value="3">Kota</option>
+                <option value="4">Provinsi</option>
+                <option value="5">Nasional</option>
+                <option value="6">Internasional</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Batal
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Simpan Prestasi
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
