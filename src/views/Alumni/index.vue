@@ -37,10 +37,6 @@ onMounted(async () => {
     new DataTable("#alumniTable");
   });
 });
-const karirLabel = {
-  1: "Kuliah",
-  2: "Kerja",
-};
 </script>
 
 <template>
@@ -102,8 +98,7 @@ const karirLabel = {
                   <a
                     v-if="item.karir && item.karir.length >= 1"
                     :href="`/karir/${item.id}`"
-                  >
-                    {{ karirLabel[item.karir] }}
+                    >Lihat Karir
                   </a>
                   <button
                     v-else

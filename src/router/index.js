@@ -20,6 +20,16 @@ const routes=[
         name:'Alumni.prestasiDetail',
         component : () => import('../views/Prestasi/index.vue')
     },
+    {
+        path:'/Karir',
+        name:'Alumni.Karir',
+        component : () => import('../views/Karir/index.vue')
+    },
+    {
+        path:'/Karir/:id',
+        name:'Alumni.KarirDetail',
+        component : () => import('../views/Karir/index.vue')
+    },
     // {
     //     path:'/edit/:id',
     //     name:'Alumni.edit',
